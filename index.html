@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="icon" type="image/svg+xml" href="dfw-signal-logo.svg">
   <title>DFW Signal</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -409,43 +408,40 @@
     function stormCycle(){
       if(!lightningRunning) return;
 
-      // Roll what kind of event happens next
       var roll = Math.random();
 
-      if(roll < 0.30){
-        // Cluster — 2 to 4 bolts rapid fire
-        var count = 2 + Math.floor(Math.random()*3);
+      if(roll < 0.18){
+        // Small cluster — 2 bolts max, wider gaps
+        var count = 2;
         var delay = 0;
         for(var i=0;i<count;i++){
           (function(d){ setTimeout(function(){ if(lightningRunning) spawnBolt(); }, d); })(delay);
-          delay += 60 + Math.random()*180;
+          delay += 200 + Math.random()*300;
         }
-        // Next event after cluster + silence
-        setTimeout(stormCycle, delay + 800 + Math.random()*1400);
+        // Long silence after cluster
+        setTimeout(stormCycle, delay + 1800 + Math.random()*2500);
 
-      } else if(roll < 0.55){
-        // Single lone strike
+      } else if(roll < 0.52){
+        // Single lone strike — most common
         spawnBolt();
-        // Long silence after
-        setTimeout(stormCycle, 1200 + Math.random()*2200);
+        setTimeout(stormCycle, 2000 + Math.random()*3500);
 
-      } else if(roll < 0.72){
-        // Double strike close together
+      } else if(roll < 0.68){
+        // Double strike with a real gap between
         spawnBolt();
-        setTimeout(function(){ if(lightningRunning) spawnBolt(); }, 80+Math.random()*150);
-        setTimeout(stormCycle, 900 + Math.random()*1600);
+        setTimeout(function(){ if(lightningRunning) spawnBolt(); }, 300+Math.random()*400);
+        setTimeout(stormCycle, 2200 + Math.random()*2800);
 
       } else {
-        // Pure silence — nothing, just darkness
-        setTimeout(stormCycle, 1600 + Math.random()*2800);
+        // Pure silence — more frequent and longer
+        setTimeout(stormCycle, 2800 + Math.random()*4500);
       }
     }
 
-    // Opening burst to establish the storm
+    // Opening — just two bolts to establish, then settle
     spawnBolt();
-    setTimeout(spawnBolt, 120);
-    setTimeout(spawnBolt, 300);
-    setTimeout(stormCycle, 800);
+    setTimeout(spawnBolt, 400);
+    setTimeout(stormCycle, 2000);
 
     // Start typewriter after initial storm — lightning continues through and after
     setTimeout(startTypewriter, 3000);
