@@ -91,8 +91,7 @@
     body.out{animation:bye 0.5s forwards;}
     @keyframes bye{to{opacity:0;}}
 
-    @media(max-width:600px){
-      .wordmark{font-size:clamp(52px,18vw,110px);}
+    
       .sub{font-size:16px;letter-spacing:0.18em;margin-bottom:36px;}
       .enter{font-size:17px;}
       .meta{font-size:9px;}
@@ -100,6 +99,18 @@
       .meta.br{right:16px;text-align:right;}
       .meta.tl{left:16px;}
       .corner{width:12px;height:12px;}
+    }
+
+    @media(max-width:600px){
+      .wordmark{font-size:clamp(48px,16vw,90px);}
+      .sub{font-size:15px;letter-spacing:0.16em;margin-bottom:32px;}
+      .enter{font-size:16px;}
+      .meta.tl{font-size:9px;top:16px;left:16px;}
+      .meta.br{font-size:9px;bottom:40px;right:16px;text-align:right;}
+      .corner{width:10px;height:10px;}
+      /* Bottom tag — single line, smaller */
+      .btm{font-size:8px;letter-spacing:0.1em;white-space:nowrap;bottom:16px;
+           left:50%;transform:translateX(-50%);width:auto;}
     }
   </style>
 
