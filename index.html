@@ -438,10 +438,9 @@
       }
     }
 
-    // Opening — just two bolts to establish, then settle
+    // Single bolt to open, then let the storm cycle take over naturally
     spawnBolt();
-    setTimeout(spawnBolt, 400);
-    setTimeout(stormCycle, 2000);
+    setTimeout(stormCycle, 2500);
 
     // Start typewriter after initial storm — lightning continues through and after
     setTimeout(startTypewriter, 3000);
