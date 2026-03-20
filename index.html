@@ -18,8 +18,18 @@
       transition:opacity 0.06s ease;
     }
 
-    /* Grain canvas */
-    #grain{position:fixed;inset:0;z-index:1;pointer-events:none;}
+    /* Grain — CSS SVG filter, zero JS overhead */
+    #grain{position:fixed;inset:0;z-index:1;pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='gr'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23gr)' opacity='1'/%3E%3C/svg%3E");
+      background-size:180px 180px;mix-blend-mode:overlay;opacity:0.55;
+      animation:grainShift 0.08s steps(1) infinite;
+    }
+    @keyframes grainShift{
+      0%{background-position:0 0;}10%{background-position:-15px 5px;}20%{background-position:10px -8px;}
+      30%{background-position:-8px 12px;}40%{background-position:5px -5px;}50%{background-position:-12px 8px;}
+      60%{background-position:8px -12px;}70%{background-position:-5px 6px;}80%{background-position:12px -4px;}
+      90%{background-position:-6px -8px;}100%{background-position:0 0;}
+    }
 
     /* SVG lightning layer */
     #svg-layer{position:fixed;inset:0;z-index:2;pointer-events:none;}
@@ -27,7 +37,7 @@
     /* Ambient light canvas — the room glow when lightning fires */
     #ambient{position:fixed;inset:0;z-index:3;pointer-events:none;mix-blend-mode:screen;}
 
-    .cur{position:fixed;pointer-events:none;z-index:999;width:16px;height:16px;transform:translate(-50%,-50%);}
+    .cur{position:fixed;pointer-events:none;z-index:999;width:28px;height:28px;transform:translate(-50%,-50%);}
     .cur::before,.cur::after{content:'';position:absolute;background:rgba(255,255,255,0.45);}
     .cur::before{width:1px;height:100%;left:50%;transform:translateX(-50%);}
     .cur::after{width:100%;height:1px;top:50%;transform:translateY(-50%);}
@@ -110,7 +120,7 @@
 </head>
 <body>
   <div id="flash"></div>
-  <canvas id="grain"></canvas>
+  <div id="grain"></div>
   <svg id="svg-layer" xmlns="http://www.w3.org/2000/svg"></svg>
   <canvas id="ambient"></canvas>
 
@@ -141,28 +151,6 @@
     var cx=W/2, cy=H/2;
 
     // ── GRAIN ──
-    var gCanvas=document.getElementById('grain');
-    var gCtx=gCanvas.getContext('2d');
-    gCanvas.width=W; gCanvas.height=H;
-
-    function drawGrain(){
-      var id=gCtx.createImageData(W,H);
-      var dd=id.data;
-      var ts=Date.now()*0.001;
-      for(var k=0;k<dd.length;k+=4){
-        var px=(k/4)%W, py=Math.floor((k/4)/W);
-        var n=Math.sin(px*127.1+py*311.7+ts*17)*43758.5453;
-        var v=n-Math.floor(n);
-        if(v>0.70){
-          var iv=Math.floor((v-0.70)/0.30*100);
-          dd[k]=dd[k+1]=dd[k+2]=iv;
-          dd[k+3]=Math.floor((v-0.70)/0.30*50);
-        }
-      }
-      gCtx.putImageData(id,0,0);
-      setTimeout(drawGrain,30);
-    }
-    drawGrain();
 
     // ── AMBIENT LIGHT (room flash) ──
     var aCanvas=document.getElementById('ambient');
@@ -238,14 +226,8 @@
       return p;
     }
 
-    // Each call gets a unique random seed baked in
-    var _boltSeed = Math.floor(Math.random()*99999);
-
     function spawnBolt(){
       if(!lightningRunning) return;
-
-      // Completely randomise every parameter so no two bolts share a profile
-      _boltSeed = Math.floor(Math.random()*99999);
 
       // Origin — full width of top edge, not just center-weighted
       var startX = Math.random()*W*0.9 + W*0.05;
@@ -268,40 +250,9 @@
 
       var g=document.createElementNS('http://www.w3.org/2000/svg','g');
 
-      // Randomise filter seed per bolt so distortion is unique
-      var fSeed = Math.floor(Math.random()*500);
-      var fSeed2 = Math.floor(Math.random()*500)+500;
-
-      // Create inline filter unique to this bolt
-      var fId = 'ef'+_boltSeed;
-      var fId2 = 'ec'+_boltSeed;
-      var defs = document.querySelector('svg defs') || document.createElementNS('http://www.w3.org/2000/svg','defs');
-
-      var fEl = document.createElementNS('http://www.w3.org/2000/svg','filter');
-      fEl.setAttribute('id', fId);
-      fEl.setAttribute('x','-20%');fEl.setAttribute('y','-20%');
-      fEl.setAttribute('width','140%');fEl.setAttribute('height','140%');
-      fEl.innerHTML = '<feTurbulence type="turbulence" baseFrequency="'+(0.02+Math.random()*0.03)+' '+(0.5+Math.random()*0.5)+'" numOctaves="'+(4+Math.floor(Math.random()*3))+'" seed="'+fSeed+'" result="n"/>'
-        +'<feDisplacementMap in="SourceGraphic" in2="n" scale="'+(8+Math.random()*14)+'" xChannelSelector="R" yChannelSelector="G" result="d"/>'
-        +'<feGaussianBlur in="d" stdDeviation="'+(2+Math.random()*4)+'" result="bl"/>'
-        +'<feComposite in="d" in2="bl" operator="over"/>';
-
-      var fEl2 = document.createElementNS('http://www.w3.org/2000/svg','filter');
-      fEl2.setAttribute('id', fId2);
-      fEl2.setAttribute('x','-5%');fEl2.setAttribute('y','-50%');
-      fEl2.setAttribute('width','110%');fEl2.setAttribute('height','200%');
-      fEl2.innerHTML = '<feTurbulence type="fractalNoise" baseFrequency="'+(0.03+Math.random()*0.05)+' '+(0.7+Math.random()*0.4)+'" numOctaves="'+(4+Math.floor(Math.random()*3))+'" seed="'+fSeed2+'" result="n2"/>'
-        +'<feDisplacementMap in="SourceGraphic" in2="n2" scale="'+(4+Math.random()*8)+'" xChannelSelector="R" yChannelSelector="G" result="d2"/>'
-        +'<feGaussianBlur in="d2" stdDeviation="'+(0.5+Math.random()*1)+'" result="cb"/>'
-        +'<feComposite in="d2" in2="cb" operator="over"/>';
-
-      var svgDefs = document.querySelector('#svg-layer defs');
-      if(!svgDefs){
-        svgDefs=document.createElementNS('http://www.w3.org/2000/svg','defs');
-        svg.insertBefore(svgDefs, svg.firstChild);
-      }
-      svgDefs.appendChild(fEl);
-      svgDefs.appendChild(fEl2);
+      // Use shared static filters — no per-bolt filter creation
+      var fId = 'electric';
+      var fId2 = 'electric-core';
 
       // Glow
       var glow=makeBoltEl(mainPts, 0.1+Math.random()*0.1, glowW, 'glow-only');
@@ -357,7 +308,6 @@
       // Clean up unique filters after bolt dies to avoid memory buildup
       var bolt={
         el:g,
-        filterIds:[fId,fId2],
         born:Date.now(),
         life: 80+Math.random()*140,
         flickerCount:0,
@@ -398,13 +348,7 @@
           ambientTarget=0;
           setTimeout(function(){
             if(bolt.el.parentNode) bolt.el.parentNode.removeChild(bolt.el);
-            // Clean up unique filter elements
-            if(bolt.filterIds){
-              bolt.filterIds.forEach(function(fid){
-                var fel=document.getElementById(fid);
-                if(fel&&fel.parentNode) fel.parentNode.removeChild(fel);
-              });
-            }
+
             activeBolts=activeBolts.filter(function(b){return b!==bolt;});
           },80);
           return;
@@ -435,19 +379,7 @@
       setTimeout(flicker, bolt.life);
     }
 
-    // Animate SVG turbulence seed for living distortion
-    var turbSeed=0;
-    setInterval(function(){
-      if(!lightningRunning) return;
-      turbSeed=Math.floor(Math.random()*999);
-      // Also randomise base frequency slightly
-      var t=document.getElementById('turb');
-      if(t) t.setAttribute('baseFrequency',(0.025+Math.random()*0.02)+' '+(0.6+Math.random()*0.3));
-      var t=document.getElementById('turb');
-      var t2=document.getElementById('turb2');
-      if(t) t.setAttribute('seed',turbSeed);
-      if(t2) t2.setAttribute('seed',(turbSeed+3)%1000);
-    },60);
+
 
     // Natural storm rhythm — clusters, silences, lone strikes
     function stormCycle(){
