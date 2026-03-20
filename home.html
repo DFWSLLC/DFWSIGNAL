@@ -152,6 +152,64 @@ footer{border-top:1px solid #1e1e22;padding:36px 48px;display:flex;align-items:c
   footer{padding:28px 20px;flex-direction:column;align-items:flex-start;}
   .cta{padding:80px 20px;}
 }
+@media(max-width:600px){
+  /* NAV — logo left, book a call right, everything else hidden */
+  nav{padding:10px 16px;}
+  .nl{font-size:14px;white-space:nowrap;}
+  .nm a:not(.nc){display:none;}
+  .nc{font-size:9px !important;padding:5px 10px !important;white-space:nowrap;}
+  /* HERO */
+  .hero{padding:0 16px;}
+  .ht{font-size:9px;}
+  .hh{font-size:clamp(50px,14vw,90px);}
+  .hs{font-size:10px;letter-spacing:0.1em;}
+  .bd-box{padding:14px 20px;}
+  .bd{font-size:24px;}
+  .bd-hint{font-size:10px;}
+  .ds{font-size:10px;}
+  /* SECTIONS */
+  .sec{padding:56px 16px;}
+  .sd{padding:0 16px;}
+  .st{font-size:clamp(28px,7vw,44px);margin-bottom:28px;}
+  .sg{grid-template-columns:1fr;}
+  .ig{grid-template-columns:1fr 1fr;}
+  .wyg{grid-template-columns:1fr;}
+  /* STATEMENT */
+  .stmt{padding:44px 16px;}
+  .stmt blockquote{font-size:clamp(20px,5.5vw,34px);}
+  /* CTA */
+  .cta{padding:56px 16px;}
+  .ch{font-size:clamp(44px,12vw,70px);}
+  /* FOOTER */
+  footer{padding:20px 16px;gap:12px;}
+  .fl2 .lo{font-size:14px;}
+  .fl2 .ad{font-size:8px;}
+  .fr{gap:12px;flex-wrap:wrap;}
+  .fr a{font-size:8px;}
+}
+@media(max-width:600px){
+  nav{padding:10px 16px;align-items:center;}
+  .nl{font-size:15px;white-space:nowrap;}
+  .nm a:not(.nc){display:none;}
+  .nc{font-size:9px;padding:6px 12px;white-space:nowrap;}
+  .hero{padding:0 16px;}
+  .hh{font-size:clamp(52px,15vw,100px);}
+  .hs{font-size:10px;letter-spacing:0.12em;}
+  .bd{font-size:26px;padding:0;}
+  .bd-box{padding:14px 24px;}
+  .bd-hint{font-size:10px;}
+  .ds{font-size:11px;}
+  .sec{padding:60px 16px;}
+  .sg{grid-template-columns:1fr;}
+  .ig{grid-template-columns:1fr 1fr;}
+  .stmt{padding:48px 16px;}
+  .ch{font-size:clamp(44px,13vw,72px);}
+  .cta{padding:60px 16px;}
+  .sd{padding:0 16px;}
+  footer{padding:24px 16px;}
+  .fr{gap:14px;flex-wrap:wrap;}
+  .fr a{font-size:9px;}
+}
 </style>
 </head>
 <body>
