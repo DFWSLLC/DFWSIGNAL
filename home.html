@@ -98,7 +98,7 @@ nav.sc{border-bottom-color:var(--border);}
   color:var(--dim);margin-bottom:16px;transition:color 0.3s;
 }
 .bd-wrap:hover .bd-hint{color:var(--muted);}
-.bd-box{position:relative;padding:20px 56px;background:var(--bg);cursor:crosshair;}
+.bd-box{position:relative;padding:20px 56px;background:var(--bg);cursor:crosshair;min-width:280px;text-align:center;}
 .bd-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
 .bd{
   background:none;border:none;color:var(--fg);cursor:crosshair;padding:0;
@@ -249,34 +249,35 @@ footer{
 @keyframes fu{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 
 @media(max-width:900px){
-  /* nav — single line, hide middle links */
+  /* nav */
   nav{padding:0 20px;height:48px;}
   .nm a:not(.nc){display:none;}
   .nm{gap:12px;}
   .nc{padding:6px 14px;font-size:9px;letter-spacing:0.12em;}
 
-  /* hero — balanced padding */
+  /* hero */
   .hero{padding:0 20px;min-height:100vh;}
   .ht{font-size:8px;letter-spacing:0.2em;margin-bottom:20px;}
   .hh{font-size:clamp(44px,13vw,72px);letter-spacing:0.04em;}
   .hs{font-size:9px;letter-spacing:0.16em;margin-top:14px;margin-bottom:36px;}
 
-  /* demo button — contained, not full width */
-  .bd-wrap{width:auto;max-width:300px;margin:0 auto;}
-  .bd-box{padding:16px 32px;width:auto;display:inline-block;}
-  .bd{font-size:20px;letter-spacing:0.16em;}
+  /* demo button — fixed width so canvas sizes correctly */
+  .bd-wrap{width:280px;margin:0 auto;}
+  .bd-box{padding:16px 24px;width:280px;display:block;}
+  .bd-canvas{position:absolute;top:0;left:0;width:100%;height:100%;}
+  .bd{font-size:18px;letter-spacing:0.14em;width:100%;display:block;text-align:center;}
   .bd-hint{font-size:9px;letter-spacing:0.12em;}
   .ds{font-size:9px;letter-spacing:0.1em;margin-top:12px;}
 
-  /* sections — comfortable but not bloated */
-  .sec{padding:60px 20px;}
+  /* sections */
+  .sec{padding:50px 20px;}
   .wg{grid-template-columns:1fr;gap:40px;}
   .sg{grid-template-columns:1fr 1fr;}
   .ig{grid-template-columns:1fr 1fr;}
   .wyg{grid-template-columns:1fr;}
   .sd{padding:0 20px;}
-  .stmt{padding:52px 20px;}
-  .cta{padding:80px 20px;}
+  .stmt{padding:50px 20px;}
+  .cta{padding:70px 20px;}
   footer{padding:28px 20px;flex-direction:column;align-items:flex-start;}
 }
 </style>
@@ -472,15 +473,17 @@ function sb(a){
   function resize(){
     var box=document.getElementById('bdBox');
     if(!box)return;
-    canvas.width=box.offsetWidth;
-    canvas.height=box.offsetHeight;
+    var r=box.getBoundingClientRect();
+    var w=r.width||box.offsetWidth;
+    var h=r.height||box.offsetHeight;
+    if(w>0&&h>0){canvas.width=w;canvas.height=h;}
   }
   window.addEventListener('resize',resize);
-  // fire multiple times to catch mobile layout settling
   resize();
-  setTimeout(resize,100);
-  setTimeout(resize,400);
-  setTimeout(resize,1000);
+  setTimeout(resize,150);
+  setTimeout(resize,500);
+  setTimeout(resize,1200);
+  requestAnimationFrame(function(){resize();drawBorder();});
 
   function drawBorder(){
     var W=canvas.width,H=canvas.height;
@@ -527,7 +530,6 @@ function sb(a){
     if(progress>=1)progress=0;
     requestAnimationFrame(drawBorder);
   }
-  drawBorder();
 })();
 
 // Vapi
