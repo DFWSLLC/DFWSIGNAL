@@ -527,7 +527,8 @@ function sb(a){
 
   window.addEventListener('resize',resize);
   resize();
-  setTimeout(resize,200);
+  // element starts at opacity:0 — resize after animation completes (0.65s delay + 0.8s duration)
+  setTimeout(resize,1600);
   loop();
 })();
 
