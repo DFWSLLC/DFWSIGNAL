@@ -261,7 +261,10 @@ footer{
   .hh{font-size:clamp(44px,13vw,72px);letter-spacing:0.04em;}
   .hs{font-size:9px;letter-spacing:0.16em;margin-top:12px;margin-bottom:28px;}
 
-  /* demo button — fixed width so canvas sizes correctly */
+  /* fix tap on mobile */
+  body{cursor:auto;}
+  .bd-wrap,.bd,.bd-box{cursor:pointer;}
+  .bd-hint{cursor:pointer;}
   .bd-wrap{width:280px;margin:0 auto;}
   .bd-box{padding:16px 24px;width:280px;display:block;}
   .bd-canvas{position:absolute;top:0;left:0;width:100%;height:100%;}
@@ -527,8 +530,10 @@ function sb(a){
 
   window.addEventListener('resize',resize);
   resize();
-  // element starts at opacity:0 — resize after animation completes (0.65s delay + 0.8s duration)
+  // resize after fade-in animation AND after fonts/layout settle on mobile
+  setTimeout(resize,800);
   setTimeout(resize,1600);
+  setTimeout(resize,3000);
   loop();
 })();
 
