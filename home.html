@@ -542,6 +542,15 @@ function sb(a){
   var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
   g.src='vapi.js';s.parentNode.insertBefore(g,s);
   g.onload=function(){
-    var V=VapiLib.default;vapi=new V(PK);
+    var V=VapiLib.default;
+    vapi=new V(PK);
     vapi.on('call-start',function(){ss('on','● Connected — speak now');sb(true);active=true;});
-    vapi.on('call-end',function(){
+    vapi.on('call-end',function(){active=false;sb(false);ss('','Live AI receptionist — speak naturally');});
+    vapi.on('speech-start',function(){ss('lv','// Listening...');});
+    vapi.on('speech-end',function(){ss('lv','// Processing...');});
+    vapi.on('error',function(e){console.error(e);ss('','Connection error — try again');});
+  };
+})(document,'script');
+</script>
+</body>
+</html>
