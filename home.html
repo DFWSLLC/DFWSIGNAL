@@ -255,28 +255,28 @@ footer{
   .nm{gap:12px;}
   .nc{padding:6px 14px;font-size:9px;letter-spacing:0.12em;}
 
-  /* hero — kill excess padding */
-  .hero{padding:0 20px;min-height:0;padding-top:72px;padding-bottom:40px;}
-  .ht{font-size:8px;letter-spacing:0.2em;margin-bottom:16px;}
+  /* hero — balanced padding */
+  .hero{padding:0 20px;min-height:100vh;}
+  .ht{font-size:8px;letter-spacing:0.2em;margin-bottom:20px;}
   .hh{font-size:clamp(44px,13vw,72px);letter-spacing:0.04em;}
-  .hs{font-size:9px;letter-spacing:0.16em;margin-top:12px;margin-bottom:28px;}
+  .hs{font-size:9px;letter-spacing:0.16em;margin-top:14px;margin-bottom:36px;}
 
   /* demo button — contained, not full width */
   .bd-wrap{width:auto;max-width:300px;margin:0 auto;}
-  .bd-box{padding:14px 28px;width:auto;display:inline-block;}
-  .bd{font-size:18px;letter-spacing:0.16em;}
+  .bd-box{padding:16px 32px;width:auto;display:inline-block;}
+  .bd{font-size:20px;letter-spacing:0.16em;}
   .bd-hint{font-size:9px;letter-spacing:0.12em;}
-  .ds{font-size:9px;letter-spacing:0.1em;}
+  .ds{font-size:9px;letter-spacing:0.1em;margin-top:12px;}
 
-  /* tighten all section padding */
-  .sec{padding:40px 20px;}
-  .wg{grid-template-columns:1fr;gap:32px;}
+  /* sections — comfortable but not bloated */
+  .sec{padding:60px 20px;}
+  .wg{grid-template-columns:1fr;gap:40px;}
   .sg{grid-template-columns:1fr 1fr;}
   .ig{grid-template-columns:1fr 1fr;}
   .wyg{grid-template-columns:1fr;}
   .sd{padding:0 20px;}
-  .stmt{padding:40px 20px;}
-  .cta{padding:60px 20px;}
+  .stmt{padding:52px 20px;}
+  .cta{padding:80px 20px;}
   footer{padding:28px 20px;flex-direction:column;align-items:flex-start;}
 }
 </style>
@@ -476,7 +476,11 @@ function sb(a){
     canvas.height=box.offsetHeight;
   }
   window.addEventListener('resize',resize);
-  resize();setTimeout(resize,200);
+  // fire multiple times to catch mobile layout settling
+  resize();
+  setTimeout(resize,100);
+  setTimeout(resize,400);
+  setTimeout(resize,1000);
 
   function drawBorder(){
     var W=canvas.width,H=canvas.height;
