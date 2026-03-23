@@ -249,12 +249,31 @@ footer{
 @keyframes fu{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 
 @media(max-width:900px){
-  nav{padding:0 20px;}.nm{gap:16px;}
-  .sec{padding:80px 20px;}.wg{grid-template-columns:1fr;gap:48px;}
+  /* nav — single line, hide middle links */
+  nav{padding:0 20px;height:48px;}
+  .nm a:not(.nc){display:none;}
+  .nm{gap:12px;}
+  .nc{padding:6px 14px;font-size:9px;letter-spacing:0.12em;}
+
+  /* hero — tighten padding so AI POWER sits close to nav */
+  .hero{padding:0 20px;padding-top:48px;}
+  .ht{font-size:8px;letter-spacing:0.2em;margin-bottom:20px;}
+  .hh{font-size:clamp(44px,13vw,72px);letter-spacing:0.04em;}
+  .hs{font-size:9px;letter-spacing:0.16em;margin-top:16px;margin-bottom:36px;}
+
+  /* demo button — contained, not full width */
+  .bd-wrap{width:auto;max-width:300px;margin:0 auto;}
+  .bd-box{padding:14px 28px;width:auto;display:inline-block;}
+  .bd{font-size:18px;letter-spacing:0.16em;}
+  .bd-hint{font-size:9px;letter-spacing:0.12em;}
+  .ds{font-size:9px;letter-spacing:0.1em;}
+
+  .sec{padding:60px 20px;}.wg{grid-template-columns:1fr;gap:40px;}
   .sg{grid-template-columns:1fr 1fr;}.ig{grid-template-columns:1fr 1fr;}
   .wyg{grid-template-columns:1fr;}.sd{padding:0 20px;}
   footer{padding:28px 20px;flex-direction:column;align-items:flex-start;}
   .cta{padding:80px 20px;}
+  .stmt{padding:60px 20px;}
 }
 </style>
 </head>
@@ -398,10 +417,10 @@ footer{
 <footer>
   <div class="fl2">
     <div class="lo">DFW Signal LLC</div>
-    <div class="ad">Dallas, TX · info@dfwsignal.ai · (972) 787-3589</div>
+    <div class="ad">Dallas, TX · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c2abaca4ad82a6a4b5b1aba5aca3aeeca3ab">[email&#160;protected]</a> · (972) 787-3589</div>
   </div>
   <div class="fr">
-    <a href="mailto:info@dfwsignal.ai">Email</a>
+    <a href="/cdn-cgi/l/email-protection#8ee7e0e8e1ceeae8f9fde7e9e0efe2a0efe7">Email</a>
     <a href="sms-policy.html">SMS Policy</a>
     <a href="terms.html">Terms & Privacy</a>
     <a href="https://calendly.com/dfwsignal-info/30min" target="_blank">Book a Call</a>
@@ -419,7 +438,7 @@ footer{
   <button class="mx" onclick="cm()">Cancel</button>
 </div></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 var PK='b622e5dc-09fd-4b15-ba52-7bf01854f5b9';
 var AID='3b7eabc9-04a7-461a-a02b-d1dc874785aa';
 var vapi=null,active=false;
@@ -510,11 +529,4 @@ function sb(a){
   g.onload=function(){
     var V=VapiLib.default;vapi=new V(PK);
     vapi.on('call-start',function(){ss('on','● Connected — speak now');sb(true);active=true;});
-    vapi.on('call-end',function(){active=false;sb(false);ss('','Live AI receptionist — speak naturally');});
-    vapi.on('speech-start',function(){ss('lv','// Listening...');});
-    vapi.on('speech-end',function(){ss('lv','// Processing...');});
-  };
-})(document,'script');
-</script>
-</body>
-</html>
+    vapi.on('call-end',function(){
